@@ -18,17 +18,21 @@ s2o = lambda s:tryx(lambda:json.loads(s))
 o2s = lambda o,indent=None:tryx(lambda:json.dumps(o, indent=indent, ensure_ascii=False, cls=MyJsonEncoder))
 
 
-def time_maker(days=0,date=None,outfmt=None,infmt='%Y-%m-%d',months=0):
+def time_maker(days=0,date=None,outfmt=None,infmt='%Y-%m-%d',
+        months=0):
     from datetime import datetime,timedelta
+    from time import mktime
     if date is None: _dt = datetime.now()
-    else: _dt = datetime.fromtimestamp(int(date)) if infmt=='0' or not infmt\
-         else datetime.strptime(str(date),infmt)
+    else: _dt = datetime.fromtimestamp(int(date))\
+        if infmt=='0' or not infmt\
+        else datetime.strptime(str(date),infmt)
     if months>0 or months<0:
         from dateutil.relativedelta import relativedelta
         _dt += relativedelta(months=months)
     _dt += timedelta(days=days)
     if outfmt is None: outfmt = infmt
-    if outfmt=='0' or not outfmt:return int(mktime(_dt.timetuple()))
+    if outfmt=='0' or not outfmt:
+        return int(mktime(_dt.timetuple()))
     return _dt.strftime(outfmt)
 
 
