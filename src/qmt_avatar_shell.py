@@ -1,3 +1,4 @@
+
 def tryx(l,e=print):
     try: return l()
     except Exception as ex: return ex if True==e else e(ex) if e else None
