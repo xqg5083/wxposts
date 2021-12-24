@@ -65,6 +65,9 @@ def my_order(code,amt,prz=0,sleep_order_id=0,acct=None):
 	print('):',rst)
 	return rst
 
+def my_pos_clear():
+	return [my_order('{}.{}'.format(v[0],v[1]),-round(v[2])) for v in my_pos() if v[2]>0]
+
 ##################################################### web.py
 import web
 web.config.debug=True
