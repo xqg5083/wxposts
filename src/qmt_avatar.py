@@ -4,14 +4,21 @@ def tryx(l,e=print):
 	try: return l()
 	except Exception as ex: return ex if True==e else e(ex) if e else None
 #####################################################
-g_acct = "...."
 g_ctx = None
 my_eval = eval
-# notes: D:\Python36x64>python -m pip install web.py --upgrade -t d:\qmt\bin.x64\Lib
-##################################################### qmt {
-def my_pos(accttype='stock',datatype='position'):
+#D:\Python36x64>python -m pip install web.py --upgrade -t d:\qmt20211207\bin.x64\Lib
+# hack for web.py
+##################################################### {
+g_acct = None
+def my_acct(acct=None):
+	global g_acct
+	if acct: g_acct = acct
+	if not g_acct: raise Exception('empty g_acct') 
+	return g_acct
+def my_pos(accttype='stock',datatype='position',acct=None):
+	if not acct: acct = my_acct()
 	_now = now()
-	obj_list = get_trade_detail_data(g_acct,accttype,datatype)
+	obj_list = get_trade_detail_data(acct,accttype,datatype)
 	print('my_pos',obj_list)
 	rt = []
 	c=0
@@ -32,12 +39,13 @@ def my_pos(accttype='stock',datatype='position'):
 					print(k,'=',v)
 	return rt
 
-def my_last_order_id(accttype='stock',datatype='order',acct=g_acct):# order/deal
+def my_last_order_id(accttype='stock',datatype='order',acct=None):# order/deal
+	if not acct: acct = my_acct()
 	print('debug a1',type(get_last_order_id))
 	return get_last_order_id(acct,accttype,datatype)
 
-def my_order(code,amt,prz,sleep_order_id=0,acct=g_acct):
-	global g_ctx
+def my_order(code,amt,prz,sleep_order_id=0,acct=None):
+	if not acct: acct = my_acct()
 	rst = passorder(23 if amt>0 else 24,1101,acct,code,11,prz,abs(amt),1,g_ctx)
 	print('my_order(',code,amt,prz)
 	if sleep_order_id>0:
@@ -58,12 +66,12 @@ sck_port = 7777
 import os
 os.environ['PORT'] = '{}'.format(sck_port)
 
-web_eval=lambda s:tryx(lambda:my_eval(s,globals()),lambda ex:str(ex))
+web_eval=lambda s:tryx(lambda:my_eval(s,globals()),lambda ex:{'errmsg':str(ex)})
 
 class index:
 	def GET(self):
-		#return web_eval('sys.version_info')
 		return web_eval('len(get_trade_detail_data(g_acct,"stock","position"))')
+		#return web_eval('sys.version_info')
 		#return web_eval('get_last_order_id(g_acct,"stock","order")')
 	def POST(self): return web_eval(web.data())
 

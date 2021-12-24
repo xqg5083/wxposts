@@ -1,3 +1,4 @@
+#-*- coding: utf-8 -*-
 
 def tryx(l,e=print):
     try: return l()
@@ -20,6 +21,7 @@ def do(s): return wc('http://localhost:7777',s)
 
 """
 python -i qmtshell.py
+>>>do('my_acct("your acct number")')
 >>>do('my_pos()')
 """
 
