@@ -82,8 +82,8 @@ web_eval=lambda s:o2s(tryx(lambda:my_eval(s,globals()),lambda ex:{'errmsg':str(e
 
 class index:
 	def GET(self):
-		return web_eval('len(get_trade_detail_data(g_acct,"stock","position"))')
-		#return web_eval('sys.version_info')
+		return web_eval('sys.version_info')
+		#return web_eval('len(get_trade_detail_data(g_acct,"stock","position"))')
 		#return web_eval('get_last_order_id(g_acct,"stock","order")')
 	def POST(self): return web_eval(web.data())
 
@@ -102,4 +102,3 @@ def handlebar(ContextInfo):
 	global g_ctx
 	g_ctx = ContextInfo
 	pass
-
