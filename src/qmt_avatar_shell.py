@@ -35,5 +35,7 @@ do('my_pos()')
 ## sell all (一键清仓2)
 do('my_pos_clear()')
 
+## get_market_data
+do("g_ctx.get_market_data(['close'],stock_code=['600000.SH'],start_time='20211224',end_time='20211225',skip_paused=True,period='1m',dividend_type='none').to_dict()")
 """
 

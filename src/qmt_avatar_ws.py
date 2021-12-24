@@ -1,4 +1,10 @@
 #-*- coding: utf-8 -*-
+"""
+TODO websocket server (to replace web.py)
+https://github.com/Pithikos/python-websocket-server
+TODO
+do("g_ctx.get_market_data(['close'],stock_code=['600000.SH'],start_time='20211224',end_time='20211225',skip_paused=True,period='1m',dividend_type='none').to_dict()")
+"""
 from time import time as now, sleep
 def tryx(l,e=print):
 	try: return l()
