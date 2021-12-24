@@ -3,6 +3,12 @@ from time import time as now, sleep
 def tryx(l,e=print):
 	try: return l()
 	except Exception as ex: return ex if True==e else e(ex) if e else None
+import json
+class MyJsonEncoder(json.JSONEncoder):
+    def default(self, obj): return tryx(lambda:json.JSONEncoder.default(self,obj),str)
+s2o = lambda s:tryx(lambda:json.loads(s))
+o2s = lambda o,indent=None:tryx(lambda:json.dumps(o, indent=indent, ensure_ascii=False, cls=MyJsonEncoder))
+
 #####################################################
 g_ctx = None
 my_eval = eval
@@ -44,9 +50,12 @@ def my_last_order_id(accttype='stock',datatype='order',acct=None):# order/deal
 	print('debug a1',type(get_last_order_id))
 	return get_last_order_id(acct,accttype,datatype)
 
-def my_order(code,amt,prz,sleep_order_id=0,acct=None):
+def my_order(code,amt,prz=0,sleep_order_id=0,acct=None):
+	global g_ctx
 	if not acct: acct = my_acct()
-	rst = passorder(23 if amt>0 else 24,1101,acct,code,11,prz,abs(amt),1,g_ctx)
+	#rst = passorder(23 if amt>0 else 24,1101,acct,code,11,prz,abs(amt),2,g_ctx)
+	#rst = passorder(23 if amt>0 else 24,1101,acct,code,5,prz,abs(amt),2,g_ctx)
+	rst = passorder(23 if amt>0 else 24,1101,acct,code,11 if prz>0 else 14,prz,abs(amt),2,g_ctx)
 	print('my_order(',code,amt,prz)
 	if sleep_order_id>0:
 		sleep(sleep_order_id)
@@ -66,7 +75,7 @@ sck_port = 7777
 import os
 os.environ['PORT'] = '{}'.format(sck_port)
 
-web_eval=lambda s:tryx(lambda:my_eval(s,globals()),lambda ex:{'errmsg':str(ex)})
+web_eval=lambda s:o2s(tryx(lambda:my_eval(s,globals()),lambda ex:{'errmsg':str(ex)}))
 
 class index:
 	def GET(self):
@@ -87,5 +96,7 @@ def stop(ContextInfo):
 	server.stop()
 	print('stopped')
 def handlebar(ContextInfo):
+	global g_ctx
+	g_ctx = ContextInfo
 	pass
 

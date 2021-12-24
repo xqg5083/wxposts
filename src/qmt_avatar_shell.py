@@ -21,7 +21,16 @@ def do(s): return wc('http://localhost:7777',s)
 
 """
 python -i qmtshell.py
->>>do('my_acct("your acct number")')
->>>do('my_pos()')
+>>>
+acct='acct_number'
+do('my_acct("{}")'.format(acct))
+do('my_pos()')
+
+# list pos>0
+[("('{}.{}',{}".format(v[0],v[1],v[2])) for v in s2o(do('my_pos()')) if v[2]>0]
+
+# sell all (一键清仓)
+[do("my_order('{}.{}',-round({}),0)".format(v[0],v[1],v[2])) for v in s2o(do('my_pos()')) if v[2]>0]
+
 """
 
