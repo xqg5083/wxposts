@@ -51,22 +51,42 @@ def my_order(code,amt,prz=0,sleep_order_id=0,acct=None):
 
 my_pos_clear=lambda:[my_order('{}.{}'.format(v[0],v[1]),-round(v[2])) for v in my_pos() if v[2]>0]
 
+##################################################### web.py
+#D:\py368x64>python -m pip install web.py --upgrade -t d:\qmt20211207\bin.x64\Lib
+port = 7777
+import web
+web.config.debug=False
+sys.argv=[]#
+os.environ['PORT'] = '{}'.format(port)
+class index:
+    def POST(self): return web_eval(web.data())
+server = web.application(('/', 'index',), globals())
+
 ##################################################### websocket-server
 #D:\py368x64\python -m pip install websocket-server --upgrade -i https://pypi.tuna.tsinghua.edu.cn/simple -t d:\qmt20211207\bin.x64\Lib
 #https://github.com/Pithikos/python-websocket-server#api
+
 from websocket_server import WebsocketServer
 server_ws = WebsocketServer(host='127.0.0.1', port=17777)
+def server_ws_start():
+    server_ws.set_fn_message_received(lambda clt,svr,msg:server_ws.send_message(clt,web_eval(msg)))
+    server_ws.run_forever()
+def server_ws_stop():
+    server_ws.disconnect_clients_abruptly()
 
-##################################################### qmt start/stop
+##################################################### qmt
 def init(ContextInfo):
     global g_ctx
     g_ctx = ContextInfo
+    import threading
+    threading.Thread(target=server_ws_start).start()
     print('init')
-    server_ws.set_fn_message_received(lambda clt,svr,msg:server_ws.send_message(clt,web_eval(msg)))
-    server_ws.run_forever()
+    server.run()# see notes above
 def stop(ContextInfo):
+    import threading
+    threading.Thread(target=server_ws_stop).start()
     print('stop')
-    server_ws.disconnect_clients_abruptly()
+    server.stop()
 def handlebar(ContextInfo):
     #global g_ctx
     #g_ctx = ContextInfo
