@@ -62,7 +62,7 @@ def init(ContextInfo):
     global g_ctx
     g_ctx = ContextInfo
     print('init')
-    server_ws.set_fn_message_received(lambda clt,svr,msg:server_ws.send_message(clt,web_eval(msg)))
+    server_ws.set_fn_message_received(lambda clt,svr,msg:tryx(lambda:server_ws.send_message(clt,web_eval(msg))))
     server_ws.run_forever()
 def stop(ContextInfo):
     print('stop')

@@ -16,6 +16,7 @@ import sys,os
 
 from websocket_server import WebsocketServer
 server_ws = WebsocketServer(host='127.0.0.1', port=17777)
+#server_ws.set_fn_new_client(lambda clt,svr:print('set_fn_new_client'))
 server_ws.set_fn_message_received(lambda clt,svr,msg:server_ws.send_message(clt,web_eval(msg)))
 server_ws.run_forever()
 

@@ -38,13 +38,28 @@ do('my_pos_clear()')
 do("g_ctx.get_market_data(['close'],stock_code=['600000.SH'],start_time='20211224',end_time='20211225',skip_paused=True,period='1m',dividend_type='none').to_dict()")
 
 ## live
-do("g_ctx.get_market_data(['close'],stock_code=['000001.SH','399300.SZ','399905.SZ','399006.SZ','399001.SZ','000852.SH'],skip_paused=True,period='1m',dividend_type='none',count=-1).to_dict()")
-'{"close": {"000001.SH": 3618.054, "000852.SH": 7776.606, "399001.SZ": 14710.328, "399006.SZ": 3297.106, "399300.SZ": 4921.345, "399905.SZ": 7278.756}}'
+g_ctx.get_market_data(['close'],stock_code=['000001.SH','399300.SZ','399905.SZ','399006.SZ','399001.SZ','000852.SH'],skip_paused=True,period='1m',dividend_type='none',count=-1).to_dict()
 
 ## hs300/zz500/zz1000
 len(get_stock_list_in_sector("沪深300"))
 len(get_stock_list_in_sector("中证500"))
 len(get_stock_list_in_sector("中证1000"))
+len(get_stock_list_in_sector("沪深A股")) #4595
+
+## 
+
+do("dict([(v[0],v[1]['lastPrice']) for v in g_ctx.get_full_tick(get_stock_list_in_sector('沪深300')).items()])")
+do("dict([(v[0],v[1]['lastPrice']) for v in g_ctx.get_full_tick(get_stock_list_in_sector('沪深A股')).items()])")
+
+do("g_ctx.get_market_data(['close'],stock_code=get_stock_list_in_sector('沪深300')[:10],skip_paused=True,period='1m',dividend_type='none',count=-1).to_dict()")
+do("g_ctx.get_market_data(['close'],stock_code=get_stock_list_in_sector('沪深300')[:50],skip_paused=True,period='1m',dividend_type='none',count=-1).to_dict()")
+do("len(g_ctx.get_market_data(['close'],stock_code=get_stock_list_in_sector('沪深300')[:50],period='1d',count=-1))")
+do("len(g_ctx.get_market_data(['close'],stock_code=get_stock_list_in_sector('沪深300')[:100],period='1d',count=-1))")
+do("len(g_ctx.get_market_data(['close'],stock_code=get_stock_list_in_sector('沪深300'),period='1d',count=-1))")
+## slow to death....
+#do("g_ctx.get_market_data(['close'],stock_code=get_stock_list_in_sector('沪深300')[:200],skip_paused=True,period='1m',dividend_type='none',count=-1).to_dict()")
+
+
 
 """
 
