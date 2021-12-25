@@ -17,7 +17,7 @@ o2s = lambda o,indent=None:tryx(lambda:json.dumps(o, indent=indent, ensure_ascii
 
 #####################################################
 g_ctx = None
-my_eval = eval
+#my_eval = eval
 g_acct = None
 def my_acct(acct=None):
 	global g_acct
@@ -79,11 +79,11 @@ sck_port = 7777
 import os
 os.environ['PORT'] = '{}'.format(sck_port)
 
-web_eval=lambda s:o2s(tryx(lambda:my_eval(s,globals()),lambda ex:{'errmsg':str(ex)}))
+#web_eval=lambda s:o2s(tryx(lambda:my_eval(s,globals()),lambda ex:{'errmsg':str(ex)}))
+web_eval=lambda s:o2s(tryx(lambda:eval(s,globals()),lambda ex:{'errmsg':str(ex)}))
 
 #D:\Python36x64>python -m pip install web.py --upgrade -t d:\qmt20211207\bin.x64\Lib
 class index:
-	def GET(self): return web_eval('sys.version_info')
 	def POST(self): return web_eval(web.data())
 server = web.application(('/', 'index',), globals())
 

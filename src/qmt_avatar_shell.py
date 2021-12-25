@@ -12,8 +12,7 @@ def get_wc(flag_py2=False):
     flag_py2 = tryx(lambda:detect_py2())
     if flag_py2: from urllib2 import urlopen
     else: from urllib.request import urlopen
-    wc=lambda u=None, data=None, m='POST',timeout=10:tryx(lambda:urlopen(url=u,data=data.encode('utf-8') if isinstance(data,str) else o2s(data).encode('utf-8') if data else None,timeout=timeout).read().decode())
-    return wc
+    return lambda u=None, data=None, m='POST',timeout=10:tryx(lambda:urlopen(url=u,data=data.encode('utf-8') if isinstance(data,str) else o2s(data).encode('utf-8') if data else None,timeout=timeout).read().decode())
 
 wc = get_wc()
 
@@ -37,5 +36,15 @@ do('my_pos_clear()')
 
 ## get_market_data
 do("g_ctx.get_market_data(['close'],stock_code=['600000.SH'],start_time='20211224',end_time='20211225',skip_paused=True,period='1m',dividend_type='none').to_dict()")
+
+## live
+do("g_ctx.get_market_data(['close'],stock_code=['000001.SH','399300.SZ','399905.SZ','399006.SZ','399001.SZ','000852.SH'],skip_paused=True,period='1m',dividend_type='none',count=-1).to_dict()")
+'{"close": {"000001.SH": 3618.054, "000852.SH": 7776.606, "399001.SZ": 14710.328, "399006.SZ": 3297.106, "399300.SZ": 4921.345, "399905.SZ": 7278.756}}'
+
+## hs300/zz500/zz1000
+len(get_stock_list_in_sector("沪深300"))
+len(get_stock_list_in_sector("中证500"))
+len(get_stock_list_in_sector("中证1000"))
+
 """
 
