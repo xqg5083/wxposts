@@ -48,8 +48,8 @@ len(get_stock_list_in_sector("沪深A股")) #4595
 
 ## 
 
-do("dict([(v[0],v[1]['lastPrice']) for v in g_ctx.get_full_tick(get_stock_list_in_sector('沪深300')).items()])")
-do("dict([(v[0],v[1]['lastPrice']) for v in g_ctx.get_full_tick(get_stock_list_in_sector('沪深A股')).items()])")
+dict([(v[0],v[1]['lastPrice']) for v in g_ctx.get_full_tick(get_stock_list_in_sector('沪深300')).items()])
+dict([(v[0],v[1]['lastPrice']) for v in g_ctx.get_full_tick(get_stock_list_in_sector('沪深A股')).items()])
 
 do("g_ctx.get_market_data(['close'],stock_code=get_stock_list_in_sector('沪深300')[:10],skip_paused=True,period='1m',dividend_type='none',count=-1).to_dict()")
 do("g_ctx.get_market_data(['close'],stock_code=get_stock_list_in_sector('沪深300')[:50],skip_paused=True,period='1m',dividend_type='none',count=-1).to_dict()")

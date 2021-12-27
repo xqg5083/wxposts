@@ -13,6 +13,21 @@ my_eval = eval
 web_eval=lambda s:o2s(tryx(lambda:my_eval(s,globals()),lambda ex:{'errmsg':str(ex)}))
 
 #####################################################
+# e.g. my_import('myqmt').ver
+my_import=lambda name, reload=True:__import__('importlib').reload(__import__(name)) if reload else __import__(name)
+
+class obj(dict):
+  def __init__(self,pa={}):
+    for k in pa: self[k]=pa[k]
+  def __getattr__(self,k):
+    return tryx(lambda:self[k],False)
+  def __setattr__(self,k,v):
+    self[k]=v
+
+# global obj store
+g_obj = obj()
+
+#####################################################
 g_ctx = None
 g_acct = None
 def my_acct(acct=None):
@@ -55,7 +70,7 @@ my_pos_clear=lambda:[my_order('{}.{}'.format(v[0],v[1]),-round(v[2])) for v in m
 #D:\py368x64\python -m pip install websocket-server --upgrade -i https://pypi.tuna.tsinghua.edu.cn/simple -t d:\qmt20211207\bin.x64\Lib
 #https://github.com/Pithikos/python-websocket-server#api
 from websocket_server import WebsocketServer
-server_ws = WebsocketServer(host='127.0.0.1', port=17777)
+server_ws = WebsocketServer(host='0.0.0.0', port=17777)
 
 ##################################################### qmt start/stop
 def init(ContextInfo):
@@ -71,4 +86,5 @@ def handlebar(ContextInfo):
     #global g_ctx
     #g_ctx = ContextInfo
     pass
+
 
